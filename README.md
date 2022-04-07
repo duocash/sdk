@@ -12,7 +12,7 @@ Some features of this SDK:
 ### Uniswap V3
 We have a special helper for Uniswap V3 to make integration even easier, 2 lines of additional code is all you need. This will fetch you information on the pool such as what percentage is locked, and all the lockers (with their positions)
 ```typescript
-import {UniswapV3Helper} from "@DuoCash/sdk";
+import {UniswapV3Helper} from "@duocash/sdk";
 
 // You need a provider for the chain you want to fetch the data from
 // This can be the users wallet 'window.ethereum' or supplied by you
@@ -39,7 +39,7 @@ for (var i = 0; i < poolInfo.lockers; i++) {
 Here we are going to check an array of addresses to see if any of them are lockers. Your application would fetch an array of addresses of whatever asset you want to check. This could be a UNIv2 LP token, a regular ERC20 token etc. All addresses are checked at the same time in a single RPC call.
 
 ```typescript
-import {Lockers} from "@DuoCash/sdk";
+import {Lockers} from "@duocash/sdk";
 
 // Your dApp fetches this from on-chain/etherscan/theGraph/BitQuery etc.
 const lpHolders = [

@@ -97,8 +97,11 @@ export class UniswapV3Helper {
 
     // Loop over all the lockers collecting info from them
     for (const [address, locker] of Object.entries(lockers)) {
-      for (let i = 0; i < positions[address].length; i++) {
-        poolInfo.lockedLiquidity = poolInfo.lockedLiquidity.add(positions[address][i].liquidity)
+      // If the locker is locked we add its positions to the locked lp total
+      if (locker.isLocked()){
+        for (let i = 0; i < positions[address].length; i++) {
+          poolInfo.lockedLiquidity = poolInfo.lockedLiquidity.add(positions[address][i].liquidity)
+        }
       }
 
       poolInfo.lockers.push({

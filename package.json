@@ -1,7 +1,7 @@
 {
   "name": "@duocash/sdk",
   "license": "MIT",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -34,7 +34,7 @@
     "uniswap",
     "dapp"
   ],
-  "homepage": "https://github.com/duocash/sdk",
+  "homepage": "https://docs.duo.cash/",
   "repository": {
     "type": "git",
     "url": "git@github.com:duocash/sdk.git"

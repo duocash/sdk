@@ -2,6 +2,7 @@
 [![Actions Status](https://github.com/duocash/sdk/workflows/Test/badge.svg)](https://github.com/duocash/sdk/actions)
 [![version number](https://img.shields.io/npm/v/@duocash/sdk?color=success&label=version)](https://github.com/duocash/sdk/releases)
 [![License](https://img.shields.io/github/license/duocash/sdk?color=success)](https://github.com/duocash/sdk/blob/main/LICENSE)
+[![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@duocash/sdk/latest.svg)](https://bundlephobia.com/result?p=@uniswap/v2-sdk@latest)
 
 The goal of this SDK is to make it easy for developers to integrate DuoCash into their website/app/dApp. 
 Right now this SDK is just able to fetch info, we plan on adding support for creating new lockers and interacting with existing lockers.
@@ -14,6 +15,11 @@ Some features of this SDK:
 More resources: 
 - [DuoCash Website](https://duo.cash/)
 - [DuoCash Docs](https://docs.duo.cash/)
+
+## Install
+Install using one of the following commands
+
+```npm i @duocash/sdk``` or ```yarn add @duocash/sdk```
 
 ## Examples
 ### Uniswap V3
@@ -36,7 +42,7 @@ const poolInfo = await uniV3.poolInfo("0xa9e93d50143d30fe51e2c83af0d3f721c305147
 console.log(`From this pool ${poolInfo.percentageLocked}% has been locked`)
 console.log(`Liquidity has been locked in ${poolInfo.lockers.length} lockers`)
 console.log(`Lockers:`)
-for (var i = 0; i < poolInfo.lockers; i++) {
+for (var i = 0; i < poolInfo.lockers.length; i++) {
   console.log(`- ${poolInfo.lockers[i].locker.getDuoCashUri()}`)
 }
 ```

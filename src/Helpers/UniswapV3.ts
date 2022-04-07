@@ -1,10 +1,9 @@
-import {apiProvider, OrderDirection, Position_orderBy} from './UniswapV3Subgraph';
 import {Provider as EthersProvider} from "@ethersproject/abstract-provider";
-import {ApolloClient, HttpLink, InMemoryCache} from "@apollo/client/core";
+import {BigNumber} from "@ethersproject/bignumber";
+
 import fetch from 'cross-fetch';
-import {Lockers} from "../../Lockers";
-import {BigNumber} from "ethers";
-import {Locker} from "../../Locker";
+import {Lockers} from "../Lockers";
+import {Locker} from "../Locker";
 
 const subgraphsUris: { [chainId: number]: string } = {
   // Mainnet
@@ -25,66 +24,58 @@ export class UniswapV3Helper {
     4, // Rinkeby
   ];
 
-  apolloClient: ApolloClient<any>
   lockers: Lockers
+  uri: string
 
   constructor(provider: EthersProvider, chainId: number) {
+    this.uri = subgraphsUris[chainId];
     this.lockers = new Lockers(provider, chainId)
-
-    this.apolloClient = new ApolloClient<any>({
-      link: new HttpLink({uri: subgraphsUris[chainId], fetch}),
-      cache: new InMemoryCache()
-    })
   }
 
   /**
    * Will fetch the amount of liquidity that is in the pool and what amount of it is locked and in which lockers
    *
    * @param poolAddress a UniswapV3 pool address
+   * @param options
    */
-  async poolInfo(poolAddress: string): Promise<PoolInfo> {
-    const api = apiProvider(
-      this.apolloClient
-    )
-
+  async poolInfo(poolAddress: string, options?: PoolInfoOptions): Promise<PoolInfo> {
     // Uni subgraphs index all addresses lowercase
     poolAddress = poolAddress.toLowerCase()
 
-    // Fetch the top (max 100) LP positions of the pool
-    const positionQuery = api.positions(`
-        id
-        liquidity
-        owner
-    `).$args({
-      where: {
-        pool: poolAddress,
-        // @ts-ignore
-        liquidity_gt: 0,
+    const poolQuery = await fetch(this.uri, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      orderBy: Position_orderBy.Liquidity,
-      orderDirection: OrderDirection.Desc,
-      subgraphError: 'allow'
-    }).$fetch()
-
-    // Fetch the total amount of liquidity in the pool
-    const poolQuery = api.pools(`
-      liquidity
-    `).$args({where: {id: poolAddress}, subgraphError: 'allow'}).$fetch()
-
-    const positionsResponse = await positionQuery;
+      body: JSON.stringify({
+        query: `
+        query FetchPoolAndTopPositions($pool: String, $count: Int) {
+          pool(id: $pool){
+            liquidity
+          },
+          positions(where: {pool: $pool, liquidity_gt: 0}, orderBy: "liquidity", orderDirection: "desc", first: $count) {
+            id,
+            liquidity,
+            owner
+          }
+        }
+      `,
+        variables: {
+          pool: poolAddress,
+          count: options && options.nOfPositions ? options.nOfPositions : 30
+        },
+      }),
+    }).then((res) => res.json() as unknown as PoolQueryResponse)
 
     // Loop over each position to collect a mapping of owner -> positions
-    let positions: {[owner: string]: [{liquidity: BigNumber, id: string}]} = {}
-    for (let i = 0; i < positionsResponse.length; i++) {
-      const position = positionsResponse[i]
+    let positions: {[owner: string]: {liquidity: BigNumber, id: string}[]} = {}
+    for (let i = 0; i < poolQuery.data.positions.length; i++) {
+      const position = poolQuery.data.positions[i]
 
-      // @ts-ignore
       if (!positions[position.owner]){
-        // @ts-ignore
         positions[position.owner] = []
       }
 
-      // @ts-ignore
       positions[position.owner].push({
         id: position.id,
         liquidity: BigNumber.from(position.liquidity)
@@ -117,12 +108,30 @@ export class UniswapV3Helper {
     }
 
     // Can only return 1 result since its based on address
-    poolInfo.totalLiquidity = BigNumber.from((await poolQuery)[0].liquidity)
+    poolInfo.totalLiquidity = BigNumber.from(poolQuery.data.pool.liquidity)
     // We do / 10,000 (and then / 100) to increase precision
     poolInfo.percentageLocked = poolInfo.lockedLiquidity.div(poolInfo.totalLiquidity.div(10000)).toNumber() / 100
 
     return poolInfo
   }
+}
+
+interface PoolQueryResponse{
+  data: {
+    pool: {
+      liquidity: string
+    },
+    positions: {
+      id: string,
+      liquidity: string,
+      owner: string,
+    }[],
+  }
+}
+
+interface PoolInfoOptions {
+  // How many of the top positions should we check (default: 30)
+  nOfPositions?: number
 }
 
 interface PoolInfo {

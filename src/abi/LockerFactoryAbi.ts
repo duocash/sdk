@@ -21,26 +21,6 @@ export default [
     type: "constructor",
   },
   {
-    inputs: [],
-    name: "InvalidTimestamp",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "IsLocked",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NoPermission",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NonexistentToken",
-    type: "error",
-  },
-  {
     anonymous: false,
     inputs: [
       {

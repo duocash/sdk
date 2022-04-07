@@ -1,4 +1,8 @@
 # DuoCash SDK
+[![Actions Status](https://github.com/duocash/sdk/workflows/Test/badge.svg)](https://github.com/duocash/sdk/actions)
+[![version number](https://img.shields.io/npm/v/@duocash/sdk?color=success&label=version)](https://github.com/duocash/sdk/releases)
+[![License](https://img.shields.io/github/license/duocash/sdk?color=success)](https://github.com/duocash/sdk/blob/main/LICENSE)
+
 The goal of this SDK is to make it easy for developers to integrate DuoCash into their website/app/dApp. 
 Right now this SDK is just able to fetch info, we plan on adding support for creating new lockers and interacting with existing lockers.
 
@@ -7,8 +11,11 @@ Some features of this SDK:
 - Multiple chains (ETH, BSC, MATIC, AVAX and Testnets)
 - UniswapV3 Helper
 
-## Usage
+More resources: 
+- [DuoCash Website](https://duo.cash/)
+- [DuoCash Docs](https://docs.duo.cash/)
 
+## Examples
 ### Uniswap V3
 We have a special helper for Uniswap V3 to make integration even easier, 2 lines of additional code is all you need. This will fetch you information on the pool such as what percentage is locked, and all the lockers (with their positions)
 ```typescript

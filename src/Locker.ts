@@ -1,4 +1,4 @@
-import {BigNumber} from "ethers";
+import {BigNumber} from "@ethersproject/bignumber";
 
 const zeroAddress = "0x0000000000000000000000000000000000000000"
 

@@ -1,8 +1,9 @@
-import {Provider as EthersProvider} from "@ethersproject/providers";
+import {Provider as EthersProvider} from "@ethersproject/abstract-provider";
+import {BigNumber, BigNumberish} from "@ethersproject/bignumber";
+
 import LockerFactoryAbi from "./abi/LockerFactoryAbi";
 import {Contract, Provider} from "ethers-multicall";
 import {Locker} from "./Locker";
-import {BigNumber, BigNumberish} from "ethers";
 
 const zeroAddress = "0x0000000000000000000000000000000000000000"
 
@@ -30,7 +31,10 @@ export class Lockers {
    * @param provider
    * @param chainId
    */
-  constructor(provider: EthersProvider, chainId: number) {
+  constructor(
+    provider: EthersProvider | any, // Has to be '| any' because of non-matching Ethers versions between packages
+    chainId: number
+  ) {
     this.chainId = chainId;
     this.provider = new Provider(provider, chainId);
     this.factory = new Contract("0x00D3216403eD04C57038c5aABc839728D27061D8", LockerFactoryAbi);

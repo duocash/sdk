@@ -45,7 +45,7 @@
   "dependencies": {
     "cross-fetch": "^3.1.5",
     "ethers": "^5.6.2",
-    "ethers-multicall": "git+https://github.com/xBA5ED/ethers-multicall.git#postinstall"
+    "ethers-multicall": "^0.2.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",

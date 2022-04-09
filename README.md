@@ -2,7 +2,7 @@
 [![Actions Status](https://github.com/duocash/sdk/workflows/Test/badge.svg)](https://github.com/duocash/sdk/actions)
 [![version number](https://img.shields.io/npm/v/@duocash/sdk?color=success&label=version)](https://github.com/duocash/sdk/releases)
 [![License](https://img.shields.io/github/license/duocash/sdk?color=success)](https://github.com/duocash/sdk/blob/main/LICENSE)
-[![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@duocash/sdk/latest.svg)](https://bundlephobia.com/result?p=@uniswap/v2-sdk@latest)
+[![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@duocash/sdk/latest.svg)](https://bundlephobia.com/result?p=@duocash/sdk@latest)
 
 The goal of this SDK is to make it easy for developers to integrate DuoCash into their website/app/dApp. 
 Right now this SDK is just able to fetch info, we plan on adding support for creating new lockers and interacting with existing lockers.
